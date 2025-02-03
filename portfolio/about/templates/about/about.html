@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %}>Home</a></li>
+  <li><a href={% url "about" %} class="active">About</a></li>
+  <li><a href={% url "website" %}>Website</a></li>
+  <li><a href="services.html">Web Scrapping</a></li>
+  <li><a href="portfolio.html">Data Science</a></li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  <li><a href={% url "login" %}>Login</a></li>
+{% endblock header %}
+
+{% block content %}
+
+  <main class="main">
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>About</h2>
+        <p>Enthusiastic and detail-oriented Python developer eager to contribute to innovative projects and grow technical skills.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4 justify-content-center">
+          <div class="col-lg-4">
+            <img src="{% static "images/profile-img-1.jpg" %}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-8 content">
+            <h2 class="pb-3">Beginner Python Developer</h2>
+            <div class="row">
+              <div class="col-lg-6">
+                <ul>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>6 December 1990</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Website:</strong> <span>www.example.com</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+385 091 942 0314</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>Rijeka, Croatia</span></li>
+                </ul>
+              </div>
+              <div class="col-lg-6">
+                <ul>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>34</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <a href="mailto:lazarickristian@gmail.com" style="color:#444444;">lazarickristian@gmail.com</a></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Permanent:</strong> <span>Available</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Freelance:</strong> <span>Available</span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row py-4">
+              <p>
+                Hello there! I'm Kristian, an entry-level developer with a passion for programming in Python. 
+                Equipped with a solid foundation in both fundamental and advanced programming concepts, my expertise extends across various domains, 
+                including object-oriented programming, database connectivity, web scraping and Pandas framework proficiency for data manipulation and analysis. 
+                Additionally, I have hands-on experience with the Django framework alongside with HTML and CSS , enabling me to design, develop, and maintain robust, 
+                scalable web applications with clean, efficient code.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    <!-- What Sets Me apart Section -->
+    <section id="services" class="services section">
+
+      <!-- Section Title -->
+      <div class="container section-title py-3" data-aos="fade-up">
+        <h2>What Sets Me Apart</h2>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+        <div class="row gy-4">
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item item-cyan position-relative">
+              <div class="icon">
+                <img src="{% static "images/education.png" %}" class="img-fluid" alt="">
+              </div>
+              <h3>Comprehensive Education</h3>
+              <p>Completed a Python Developer course covering a spectrum of topics at Algebra University, Zagreb, Croatia.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item item-orange position-relative">
+              <div class="icon">
+                <img src="{% static "images/learning.png" %}" class="img-fluid" alt="">
+              </div>
+              <h3>Continuous Learning</h3>
+              <p>Actively pursuing additional courses on Udemy, specializing in Django framework, Web scraping, practical SQL with Python, 
+                  Python OOP, Pandas framework, Git and GitHub with much more to come.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item item-teal position-relative">
+              <div class="icon">
+                <img src="{% static "images/django.png" %}" class="img-fluid" alt="">
+              </div>
+              <h3>Web Development</h3>
+              <p>Skilled in the Django framework at a beginner level alongside with HTML and CSS, with a growing ability to develop simple web 
+                applications and work on foundational backend solutions like this one.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-item item-red position-relative">
+              <div class="icon">
+                <img src="{% static "images/scrapping.png" %}" class="img-fluid" alt="">
+              </div>
+              <h3>Web Scraping Expertise</h3>
+              <p>Proficient in extracting and parsing data from websites using cutting-edge tools like BeautifulSoup and Selenium.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item item-indigo position-relative">
+              <div class="icon">
+                <img src="{% static "images/data.png" %}" class="img-fluid" alt="">
+              </div>
+              <h3>Data Enthusiast</h3>
+              <p>Skilled in Pandas for efficient data manipulation and analysis, coupled with visualization using Matplotlib.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+            <div class="service-item item-pink position-relative">
+              <div class="icon">
+                <img src="{% static "images/team.png" %}" class="img-fluid" alt="">
+              </div>
+              <h3>Team Player</h3>
+              <p>Eager to collaborate and contribute to projects while continually enhancing my skills.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+      </div>
+
+    </section><!-- /Services Section -->
+
+  </main>
+
+{% endblock content %}

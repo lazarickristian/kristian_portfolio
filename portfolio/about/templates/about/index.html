@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Index-Kristian Portfolio{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %} class="active">Home</a></li>
+  <li><a href={% url "about" %}>About</a></li>
+  <li><a href={% url "website" %}>Website</a></li>
+  <li><a href="services.html">Web Scrapping</a></li>
+  <li><a href="portfolio.html">Data Science</a></li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  <li><a href={% url "login" %}>Login</a></li>
+{% endblock header %}
+
+{% block content %}
+
+  <main class="main">
+
+      <!-- Index Section -->
+      <section id="hero" class="hero section">
+        
+        <div class="container">
+          <img src="{% static "images/index_1.png" %}" alt="" data-aos="fade-in" >
+        </div>
+        <div class="container text-center" data-aos="zoom-out" data-aos-delay="200">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <h2>Kristian Lazarić</h2>
+              <p>Beginner Python Developer</p>
+              <a href={% url "about" %} class="btn-get-started">About Me</a>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <img src="{% static "images/index_2.png" %}" alt="" data-aos="fade-in" >
+        
+      </section><!-- /Index Section -->
+
+  </main>
+
+{% endblock content %}
+
+
+
+
+
+

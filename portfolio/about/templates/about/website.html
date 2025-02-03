@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Django Framework{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %}>Home</a></li>
+  <li><a href={% url "about" %}>About</a></li>
+  <li><a href={% url "website" %} class="active">Website</a></li>
+  <li><a href="services.html">Web Scrapping</a></li>
+  <li><a href="portfolio.html">Data Science</a></li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  <li><a href={% url "login" %}>Login</a></li>
+{% endblock header %}
+
+{% block content %}
+
+  <main class="main">
+
+    <!-- Section Title -->
+    <section id="title" class="about section pb-0 mb-0">
+      
+      <div class="container section-title pt-3 pb-5" data-aos="fade-up">
+        <h2>Website</h2>
+        <p>This page details content of this website, including the technologies used and custom modifications I made to built it.</p>
+      </div>
+
+    </section><!-- End Section Title -->
+
+    <section id="django-section" class="hero-django section pt-0">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="100">
+        <!-- Left: Django Framework Description -->
+        <div class="django-container pt-5">
+          <p>Welcome to my personal portfolio and CV website, built using the Django Framework to showcase my Python programming skills. 
+            As a beginner in software development, I have designed this platform to demonstrate my abilities in web development, data science, 
+            and web scraping.</p>
+        </div>
+        <!-- Right: Django Framework Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/programmer.png" %}" alt="Django Logo">
+        </div>
+      </div>
+
+    </section><!-- /Django Section -->
+
+    <section id="django-section" class="hero-django section pt-0">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="200">
+        <!-- Left: Django Framework Description -->
+        <div class="django-container">
+          <p>This website features various interactive applications that highlight my technical expertise. These apps, accessible only to registered users, 
+            allow visitors to explore my knowledge of Python in action. Additionally, each registered user has a personal section where they can manage 
+            their profiles by updating, editing, or deleting their profiles. For those interested in the technical details, the source code of this project 
+            is available on my <a href="https://github.com/lazarickristian">GitHub profile</a>, where you can explore, review, and provide feedback on my work.</p>
+        </div>
+        <!-- Right: Django Framework Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/webpage.png" %}" alt="Django Logo">
+        </div>
+      </div>
+
+    </section><!-- /Django Section -->
+
+    <section id="django-section" class="hero-django section pt-0">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="300">
+        <!-- Left: Django Framework Description -->
+        <div class="django-container">
+          <p>Frontend part of website is based on a Bootstrap template from <a href="https://bootstrapmade.com/">BootstrapMade</a>, which I have customized 
+            to enhance it's aesthetics and functionality and icons are used from <a href="https://www.flaticon.com/free-icons/send">Flaticon icons</a>. 
+            However, since I'm not a HTML and CSS expert, some modifications may contain mistakes or bugs, and I welcome any feedback or suggestions 
+            for improvement.</p>
+        </div>
+        <!-- Right: Django Framework Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/html.png" %}" alt="Django Logo">
+        </div>
+      </div>
+
+    </section><!-- /Django Section -->
+
+    <section id="django-section" class="hero-django section pt-0">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="100">
+        <!-- Left: Django Framework Description -->
+        <div class="django-container">
+          <p>Finally, I have included a contact form where visitors can reach out for inquiries, collaboration opportunities, or any advice related to 
+            Python programming and web development. I welcome all feedback and discussions, making this platform not only a showcase of my skills but 
+            also a way to connect with like-minded individuals and potential collaborators and employers.</p>
+        </div>
+        <!-- Right: Django Framework Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/email.png" %}" alt="Django Logo">
+        </div>
+      </div>
+      
+    </section><!-- /Django Section -->
+
+  </main>
+
+
+{% endblock content %}
