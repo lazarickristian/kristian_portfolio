@@ -1,0 +1,46 @@
+from django.shortcuts import render, redirect
+from django.views import View
+from .forms import UserRegistrationForm, LoginForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.http import HttpResponse
+from .models import Profile
+
+class Login(View):
+  def get(self, request):
+    login_form = LoginForm()
+    return render(request, "users/login.html", {'login_form':login_form})
+
+  def post(self, request):
+    form = LoginForm(request.POST)
+    if form.is_valid():
+        data = form.cleaned_data
+        user = authenticate(request, username=data['username'], password=data['password'])
+        if user is not None :
+            login(request, user)
+            messages.success(request, f"{data['username']}, You have successfully logged in!")
+            return redirect('index')
+        else :
+            messages.warning(request, "Invalid username or password.")
+            return redirect('login')
+
+class Logout(View):
+   def get(self, request):            
+    logout(request)
+    messages.success(request, "You have been logged out successfully.")
+    return redirect("index")
+
+class Register_user(View):
+  def get(self, request):
+    user_form = UserRegistrationForm()
+    return render(request, "users/register_user.html", {'user_form':user_form})
+
+  def post(self, request):
+    user_form = UserRegistrationForm(request.POST)
+    if user_form.is_valid():
+      new_user = user_form.save()
+      Profile.objects.create(user=new_user)
+      messages.success(request, f"{user_form['username'].value()}, You have successfully register!")
+      return redirect("index")
+    else:
+      return render(request, 'users/register_user.html', {'user_form':user_form})       

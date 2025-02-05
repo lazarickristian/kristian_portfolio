@@ -10,13 +10,28 @@
   <li><a href="services.html">Web Scrapping</a></li>
   <li><a href="portfolio.html">Data Science</a></li>
   <li><a href={% url "contact" %}>Contact</a></li>
-  <li><a href={% url "login" %}>Login</a></li>
+  {% if request.user.is_authenticated %}
+    <li><a href="#">My profile</a></li>
+    <li><a href={% url "logout" %}>Logout</a></li>
+  {% else %}
+    <li><a href={% url "login" %}>Login</a></li>
+  {% endif %}
+  
 {% endblock header %}
 
 {% block content %}
 
   <main class="main">
-
+    {% if messages %}
+      <div class="container mt-3">
+          {% for message in messages %}
+              <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          {% endfor %}
+      </div>
+    {% endif %} 
       <!-- Index Section -->
       <section id="hero" class="hero section">
         

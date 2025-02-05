@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %}>Home</a></li>
+  <li><a href={% url "about" %}>About</a></li>
+  <li><a href={% url "website" %}>Website</a></li>
+  <li><a href="services.html">Web Scrapping</a></li>
+  <li><a href="portfolio.html">Data Science</a></li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  <li><a href={% url "login" %}>Login</a></li>
+{% endblock header %}
+
+{% block content %}
+
+  <main class="main">
+
+    <section id="login-section" class="hero section text-center">
+
+      <div class="login-wrapper" data-aos="fade-up">      
+        <!-- Left: Register Form -->
+        <div class="login-container">
+          <h2>Register</h2>
+          <form method="POST" action="#">
+            {% csrf_token %}
+            <div class="mb-3">
+              <div class='form-control'>{{user_form.username}}</div>
+            </div>
+            <div class="mb-3">
+              <div class='form-control'>{{user_form.email}}</div>
+            </div>
+            <div class="mb-3">
+              <div class='form-control'>{{user_form.password1}}</div>
+            </div>
+            <div class="mb-3">
+              <div class='form-control'>{{user_form.password2}}</div>
+            </div>
+
+            <div class="mb-3">
+              {% if user_form.username.errors %}
+              <div class="text-danger">
+                {% for error in user_form.username.errors %}
+                  <small>{{ error }}</small><br>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              {% if user_form.email.errors %}
+              <div class="text-danger">
+                {% for error in user_form.email.errors %}
+                  <small>{{ error }}</small><br>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              {% if user_form.password1.errors %}
+                <div class="text-danger">
+                  {% for error in user_form.password1.errors %}
+                    <small>{{ error }}</small><br>
+                  {% endfor %}
+                </div>
+              {% endif %} 
+
+              {% if user_form.password2.errors %}
+              <div class="text-danger">
+                {% for error in user_form.password2.errors %}
+                  <small>{{ error }}</small><br>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+            </div>
+            <button type="submit" class="btn btn-login">Register</button>
+          </form>
+          <p class="mt-4">Already have an account? <a href={% url "login" %}>Login here</a></p>
+          <p class="mt-3">
+            <div class="alert alert-warning text-center">
+              <strong>Note:</strong> This is a beginner's portfolio website. Please consider using a test password, not one you use on other websites.
+            </div>
+          </p>
+        </div>
+        <!-- Right: Register Image -->
+        <div class="image-container-login">
+          <img src="{% static "images/registration.png" %}" alt="User Silhouette">
+        </div>
+      </div>
+
+    </section><!-- /Login Section -->
+
+  </main>
+
+{% endblock content %}
