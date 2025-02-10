@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{request.user}}'s Profile{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %}>Home</a></li>
+  <li><a href={% url "about" %}>About</a></li>
+  <li><a href={% url "website" %}>Website</a></li>
+  <li><a href="services.html">Web Scrapping</a></li>
+  <li><a href="portfolio.html">Data Science</a></li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  {% if request.user.is_authenticated %}
+    <li><a href={% url "edit_user" %} class="active">My profile</a></li>
+    <li><a href={% url "logout" %}>Logout</a></li>
+  {% else %}
+    <li><a href={% url "login" %}>Login</a></li>
+  {% endif %}
+{% endblock header %}
+
+{% block content %}
+
+  <main class="main">
+
+    <section id="login-section" class="hero section text-center">
+
+      <div class="login-wrapper" data-aos="fade-up">      
+        <div class="login-container">
+          <h2>Hello {{request.user}}</h2>
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="{{ user_form.first_name.id_for_label }}" class="d-block text-start mb-1">First Name:</label>
+              <div class='form-control'>{{user_form.first_name}}</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ user_form.last_name.id_for_label }}" class="d-block text-start mb-1">Last Name:</label>
+              <div class='form-control'>{{user_form.last_name}}</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ user_form.email.id_for_label }}" class="d-block text-start mb-1">Email:</label>
+              <div class='form-control'>{{user_form.email}}</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="id_image" class="d-block text-start mb-2">Profile Image:</label>
+              <div class='form-control'>
+                <input type="file" name="image" id="id_image" style="display: none;" onchange="updateFileName()">
+                <button type="button" class="btn btn-upload mb-2" onclick="document.getElementById('id_image').click();">
+                📁 Choose File
+                </button>
+                <span id="file-name" style="margin-left: 10px; font-style: italic;"></span>
+                
+                {% if profile_image %}
+                  <label for="id_image-clear_id">
+                      <input type="checkbox" name="image-clear" id="id_image-clear_id">
+                      Clear Image
+                  </label>
+                {% endif %}
+              </div>
+            </div>
+
+            {% if user_form.first_name.errors %}
+              <div class="text-danger">
+                {% for error in user_form.first_name.errors %}
+                  <small>{{ error }}</small><br>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if user_form.last_name.errors %}
+              <div class="text-danger">
+                {% for error in user_form.last_name.errors %}
+                  <small>{{ error }}</small><br>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if user_form.email.errors %}
+              <div class="text-danger">
+                {% for error in user_form.email.errors %}
+                  <small>{{ error }}</small><br>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if profile_form.image.errors %}
+              <div class="text-danger">
+                  {{ profile_form.image.errors.0 }}
+              </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-login mt-3">Update User</button>
+
+          </form>
+
+          <p class="mt-2">Password Change? <a href='#'>Click here</a></p>
+
+        </div>
+         
+        <div class="image-container-login">
+          {% if not profile_image %}
+              <img src="{% static "images/anonymous.png" %}" alt="User Silhouette">          
+          {% else %}
+              <img src="{{profile_image.url}}" alt="User Silhouette">
+          {% endif %}
+
+          <!-- Delete Account Button (Opens Modal) -->
+          <button type="button" class="btn btn-outline-danger mt-3" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+            Delete Account
+          </button>
+
+          <!-- Delete Confirmation Modal -->
+          <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteAccountModalLabel">Confirm Account Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ⚠️ Are you sure you want to delete your account? <br>
+                        This action cannot be undone!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a href="{% url 'delete_user' %}" class="btn btn-danger">Yes, Delete</a>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+<!-- JavaScript for File Name Display -->
+<script>
+  function updateFileName() {
+      var fileInput = document.getElementById('id_image');
+      var fileNameDisplay = document.getElementById('file-name');
+
+      if (fileInput.files.length > 0) {
+          fileNameDisplay.textContent = fileInput.files[0].name; // Show selected file name
+      } else {
+          fileNameDisplay.textContent = "";
+      }
+  }
+
+</script>
+
+
+{% endblock content %}
+

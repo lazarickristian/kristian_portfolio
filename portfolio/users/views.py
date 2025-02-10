@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserRegistrationForm, LoginForm
+from .forms import UserRegistrationForm, LoginForm, UserEditForm, ProfileEditForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse
@@ -40,7 +40,34 @@ class Register_user(View):
     if user_form.is_valid():
       new_user = user_form.save()
       Profile.objects.create(user=new_user)
-      messages.success(request, f"{user_form['username'].value()}, You have successfully register!")
+      messages.success(request, f"{user_form['username'].value()}, You have successfully registered!")
       return redirect("index")
     else:
-      return render(request, 'users/register_user.html', {'user_form':user_form})       
+      return render(request, 'users/register_user.html', {'user_form':user_form})            
+
+
+class Edit_User(View):
+  def post(self, request):
+      user_form = UserEditForm(instance=request.user, data=request.POST)
+      profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
+      if user_form.is_valid() and profile_form.is_valid():
+        user_form.save()
+        profile_form.save()
+        return redirect('edit_user')
+
+      else:
+        profile = Profile.objects.get(user=request.user)
+        return render(request, 'users/edit_user.html', {'user_form':user_form, 'profile_form':profile_form, 'profile_image': profile.image})  
+
+  def get(self, request):
+      user_form = UserEditForm(instance=request.user)
+      profile = Profile.objects.get(user=request.user)
+      return render(request, 'users/edit_user.html', {'user_form':user_form, 'profile_image':profile.image})  
+
+class DeleteUserView(View):
+  def get(self, request):
+    user = request.user  
+    logout(request)  
+    user.delete()  
+    messages.success(request, f"User {user} has been deleted")
+    return redirect("index")  

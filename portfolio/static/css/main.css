@@ -1557,14 +1557,17 @@ section,
 }
 
 
-
-
-
-
-
-
-
-
+.btn-upload {
+  background-color: white;
+  border-color:#34b7a7 ;
+  color: #34b7a7;
+  font-weight: bold;
+  width: 80%;
+}
+.btn-upload:hover {
+  background-color: #34b7a7;
+  color: white;
+}
 /*--------------------------------------------------------------
 # Other styles
 --------------------------------------------------------------*/

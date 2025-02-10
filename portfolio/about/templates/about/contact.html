@@ -11,7 +11,7 @@
   <li><a href="#">Data Science</a></li>
   <li><a href={% url "contact" %} class="active">Contact</a></li>
   {% if request.user.is_authenticated %}
-    <li><a href="#">My profile</a></li>
+    <li><a href={% url "edit_user" %}>My profile</a></li>
     <li><a href={% url "logout" %}>Logout</a></li>
   {% else %}
     <li><a href={% url "login" %}>Login</a></li>
