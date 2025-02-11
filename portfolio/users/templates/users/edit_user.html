@@ -21,12 +21,22 @@
 {% block content %}
 
   <main class="main">
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+      </div>
+    {% endif %} 
 
     <section id="login-section" class="hero section text-center">
 
       <div class="login-wrapper" data-aos="fade-up">      
         <div class="login-container">
-          <h2>Hello {{request.user}}</h2>
+          <h2>Hello '{{request.user}}'</h2>
           <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
@@ -97,7 +107,7 @@
 
           </form>
 
-          <p class="mt-2">Password Change? <a href='#'>Click here</a></p>
+          <p class="mt-2">Password Change? <a href={% url "password_change" %}>Click here</a></p>
 
         </div>
          
@@ -143,14 +153,14 @@
 <!-- JavaScript for File Name Display -->
 <script>
   function updateFileName() {
-      var fileInput = document.getElementById('id_image');
-      var fileNameDisplay = document.getElementById('file-name');
+    var fileInput = document.getElementById('id_image');
+    var fileNameDisplay = document.getElementById('file-name');
 
-      if (fileInput.files.length > 0) {
-          fileNameDisplay.textContent = fileInput.files[0].name; // Show selected file name
-      } else {
-          fileNameDisplay.textContent = "";
-      }
+    if (fileInput.files.length > 0) {
+        fileNameDisplay.textContent = fileInput.files[0].name; // Show selected file name
+    } else {
+        fileNameDisplay.textContent = "";
+    }
   }
 
 </script>

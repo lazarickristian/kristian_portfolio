@@ -12,6 +12,7 @@ db.sqlite3
 # Django static and media folders
 /staticfiles/
 /mediafiles/
+media/
 
 # Environment variable files
 .env

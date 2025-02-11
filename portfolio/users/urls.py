@@ -1,6 +1,7 @@
 from django.urls import path
 from django.shortcuts import render
 from django.views.generic import RedirectView
+
 from . import views
 
 urlpatterns = [
@@ -9,4 +10,6 @@ urlpatterns = [
     path('register/', views.Register_user.as_view(), name='register'),
     path('edit/', views.Edit_User.as_view(), name='edit_user'),
     path('delete-user/', views.DeleteUserView.as_view(), name='delete_user'),
+    path('password-change/', views.CustomPasswordChangeView.as_view(), name='password_change')
 ]
+

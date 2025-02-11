@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import View
-from .forms import UserRegistrationForm, LoginForm, UserEditForm, ProfileEditForm
+from django.contrib.auth import views as auth_views
+from .forms import UserRegistrationForm, LoginForm, UserEditForm, ProfileEditForm, CustomPasswordChangeForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse
@@ -71,3 +73,13 @@ class DeleteUserView(View):
     user.delete()  
     messages.success(request, f"User {user} has been deleted")
     return redirect("index")  
+  
+class CustomPasswordChangeView(auth_views.PasswordChangeView):
+  form_class = CustomPasswordChangeForm  
+  template_name = 'users/password_change.html'
+  success_url = reverse_lazy('edit_user')  
+
+  def form_valid(self, form):
+      """Override form_valid to add a success message before redirecting"""
+      messages.success(self.request, "Your password has been changed successfully!")
+      return super().form_valid(form)
