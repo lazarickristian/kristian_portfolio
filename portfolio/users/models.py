@@ -2,11 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 import os
+import shutil 
 
 def user_directory_path(instance, filename):
     # This function will generate a unique upload path based on the username
-    #print(filename[-4:])
-    return f'users/{instance.user.username}/{instance.user.username}{filename[-4:]}'
+    _, extension = os.path.splitext(filename)
+    extension = extension.lower()
+    return f'users/{instance.user.username}/{instance.user.username}{extension}'
     
 
 class Profile(models.Model):

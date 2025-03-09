@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.contrib.auth import views as auth_views
-from .forms import UserRegistrationForm, LoginForm, UserEditForm, ProfileEditForm, CustomPasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+from .forms import UserRegistrationForm, LoginForm, UserEditForm, ProfileEditForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomSetPasswordForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse
@@ -21,7 +21,9 @@ class Login(View):
         if user is not None :
             login(request, user)
             messages.success(request, f"{data['username']}, You have successfully logged in!")
-            return redirect('index')
+            #return redirect('index')
+            next_url = request.GET.get("next")
+            return redirect(next_url) if next_url else redirect('index')
         else :
             messages.warning(request, "Invalid username or password.")
             return redirect('login')
@@ -74,7 +76,7 @@ class DeleteUserView(View):
     messages.success(request, f"User {user} has been deleted")
     return redirect("index")  
   
-class CustomPasswordChangeView(auth_views.PasswordChangeView):
+class CustomPasswordChangeView(PasswordChangeView):
   form_class = CustomPasswordChangeForm  
   template_name = 'users/password_change.html'
   success_url = reverse_lazy('edit_user')  
@@ -83,3 +85,12 @@ class CustomPasswordChangeView(auth_views.PasswordChangeView):
       """Override form_valid to add a success message before redirecting"""
       messages.success(self.request, "Your password has been changed successfully!")
       return super().form_valid(form)
+  
+class CustomPasswordResetView(PasswordResetView):
+  form_class = CustomPasswordResetForm  
+  template_name = 'users/password_reset.html'
+ 
+
+class CustomPasswordConfirmView(PasswordResetConfirmView):
+  form_class = CustomSetPasswordForm
+  template_name = 'users/password_reset_confirm.html'

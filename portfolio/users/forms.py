@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from django.core.exceptions import ValidationError
 from .models import Profile
 
@@ -68,7 +68,7 @@ class LoginForm(forms.Form):
 
 class UserEditForm(forms.ModelForm):
     first_name = forms.CharField(
-        required=False,
+        required=True,
         widget=forms.TextInput(attrs={
             'placeholder': 'First Name',
             'class': 'w-full',
@@ -77,7 +77,7 @@ class UserEditForm(forms.ModelForm):
     )
 
     last_name = forms.CharField(
-        required=False,
+        required=True,
         widget=forms.TextInput(attrs={
             'placeholder': 'Last Name',
             'class': 'w-full',
@@ -143,3 +143,41 @@ class CustomPasswordChangeForm(PasswordChangeForm):
     class Meta:
         model = User
         fields = ['old_password', 'new_password1', 'new_password2']
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Email',
+            'class': 'w-full',
+            'style': 'border: none; outline: none; text-align: left; width: 100%; padding-left: 0;'
+        })
+    )
+
+    class Meta:
+        model = User
+        fields = ['email']
+
+class CustomSetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'New Password',
+            'class': 'w-full',
+            'style': 'border: none; outline: none; text-align: left; width: 100%; padding-left: 0;'
+        })
+    )
+
+    new_password2 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Confirm New Password',
+            'class': 'w-full',
+            'style': 'border: none; outline: none; text-align: left; width: 100%; padding-left: 0;'
+        })
+    )
+
+    class Meta:
+        model = User
+        fields = ['new_password1', 'new_password2',]
