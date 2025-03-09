@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Football Data Scraping{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %}>Home</a></li>
+  <li><a href={% url "about" %}>About</a></li>
+  <li><a href={% url "website" %}>Website</a></li>
+  <li class="dropdown"><a href="#"><span>Web Apps</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+    <ul>
+      <li><a href="{% url "football" %}">Football Data</a></li>
+      <li><a href="#">Second App</a></li>
+      <li><a href="#">Third App</a></li>
+      <li><a href="#">Fourth App</a></li>
+    </ul>
+  </li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  {% if request.user.is_authenticated %}
+    <li><a href={% url "edit_user" %}>My profile</a></li>
+    <li><a href={% url "logout" %}>Logout</a></li>
+  {% else %}
+    <li><a href={% url "login" %}>Login</a></li>
+  {% endif %}
+{% endblock header %}
+
+{% block content %}
+
+  <main class="main">
+    {% if messages %}
+      <div class="container mt-3">
+          {% for message in messages %}
+              <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          {% endfor %}
+        </div>
+    {% endif %} 
+
+    <section id="football_scrape" class="about section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Football Data Scraping</h2>
+        <p>Welcome to my Football Data Scraping app! <br> This webpage showcases my web scraping skills by extracting season summaries for selected 
+          football clubs. <br>You can choose from the top 5 European leagues, along with the Croatian league as an addition, reflecting my Croatian background. 
+          <br>Simply select a league, season, and club, then generate a structured report in PDF format.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100"> 
+        <div class="row gy-4 justify-content-center">
+          <div class="login-wrapper" data-aos="fade-up" data-aos-delay="100"> 
+            
+            <!-- Left: Dropdown Lists -->
+            <div class="login-container ">
+
+              <!-- League Dropdown -->
+              <div class="mb-3">
+                <form method="GET">
+                
+                  <select id="league" name="league" class="form-control" onchange="this.form.submit()">
+                      <option value="" disabled selected>Choose a League</option>
+                      {% for league, url in leagues.items %}
+                          <option value="{{ league }}" {% if league == selected_league %}selected{% endif %}>{{ league }}</option>
+                      {% endfor %}
+                  </select>
+
+                </form>
+              </div>
+
+              <!-- Show season dropdown only after selecting a league -->
+              <div class="mb-3">
+                <form method="GET" >
+
+                  {% if not selected_league %}
+                    <select id="season" name="season" class="form-control" disabled>
+                    <option value="" disabled selected>Choose a Season</option>
+                    </select>
+                  {% else %}
+                    <input type="hidden" name="league" value="{{ selected_league }}">
+                    <select id="season" name="season" class="form-control" onchange="this.form.submit()">
+                    <option value="" disabled selected>Choose a Season</option>
+                    {% for season, season_id in seasons.items %}
+                        <option value="{{ season }}" {% if season == selected_season %}selected{% endif %}>{{ season }}</option>
+                    {% endfor %}
+                    </select>
+                  {% endif %}
+
+                </form>
+              </div>
+              
+              <!-- Show clubs dropdown only after selecting a league and season -->
+              <div class="mb-3">
+                <form method="GET">
+
+                  {% if not selected_season %}
+                    <input type="hidden" name="league" value="{{ selected_league }}">
+                    <select id="club" name="club" class="form-control" disabled>
+                    <option value="" disabled selected>Choose a Club</option>
+                    </select>
+                  {% else %}
+                    <input type="hidden" name="league" value="{{ selected_league }}">
+                    <input type="hidden" name="season" value="{{ selected_season }}">
+                    <select id="club" name="club" class="form-control" onchange="this.form.submit()">
+                    <option value="" disabled selected>Choose a Club</option>
+                    {% for club, club_url in clubs.items %}
+                      <option value="{{ club }}" {% if club == selected_club %}selected{% endif %}>{{ club }}</option>
+                    {% endfor %}  
+                    </select>
+                  {% endif %}
+                  
+                </form>
+              </div>
+            </div>    
+          
+            <div class="image-container-login">
+              {% if not selected_league %}
+                <img src="{% static "images/football.png" %}" alt="football">
+              {% else %}
+                <img src="{{selected_league_logo}}" alt="football">  
+              {% endif %}        
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+{% endblock content %}

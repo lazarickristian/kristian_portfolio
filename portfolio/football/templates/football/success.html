@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Success{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %}>Home</a></li>
+  <li><a href={% url "about" %}>About</a></li>
+  <li><a href={% url "website" %}>Website</a></li>
+  <li><a href={% url "football" %} >Web Scrapping</a></li>
+  <li><a href="portfolio.html">Data Science</a></li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  {% if request.user.is_authenticated %}
+    <li><a href={% url "edit_user" %}>My profile</a></li>
+    <li><a href={% url "logout" %}>Logout</a></li>
+  {% else %}
+    <li><a href={% url "login" %}>Login</a></li>
+  {% endif %}
+{% endblock header %}
+
+{% block content %}
+
+  <main class="main">
+
+    <section class="hero section text-center">
+
+      <div class="login-wrapper" data-aos="fade-up">
+
+        <!-- Left: Success -->
+        <div class="login-container px-4">
+          <h3>Well Done!</h3>
+          <p>✅ You have successfully generated the PDF with <strong>{{ selected_club }}</strong> summary for the <strong>{{ selected_season }}</strong> season!</p>
+          <div class="mb-3">
+            <form method="GET" action='{% url "success" %}'>
+            <input type="hidden" name="selected_club_url" value="{{ selected_club_url }}">
+            <input type="hidden" name="selected_club" value="{{ selected_club }}">
+            <input type="hidden" name="selected_season" value="{{ selected_season }}">
+            <input type="hidden" name="selected_club_logo" value="{{ selected_club_logo }}">
+            <p><button type="submit" name='download' class="btn btn-login mt-3" id="generate-report">Download Report</button></p>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Image -->
+        <div class="image-container-login">
+          <img src="{{selected_club_logo}}" alt="Image">
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+{% endblock content %}
