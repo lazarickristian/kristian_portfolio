@@ -1,0 +1,637 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}CV Generator{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %}>Home</a></li>
+  <li><a href={% url "about" %}>About</a></li>
+  <li><a href={% url "website" %}>Website</a></li>
+  <li class="dropdown"><a href="#"><span>Web Apps</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+    <ul>
+      <li><a href={% url "football" %}>Football Data</a></li>
+      <li><a href={% url "cv_generator" %}>CV Generator</a></li>
+      <li><a href="#">Third App</a></li>
+      <li><a href="#">Fourth App</a></li>
+    </ul>
+  </li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  {% if request.user.is_authenticated %}
+    <li><a href={% url "edit_user" %}>My profile</a></li>
+    <li><a href={% url "logout" %}>Logout</a></li>
+  {% else %}
+    <li><a href={% url "login" %}>Login</a></li>
+  {% endif %}
+  
+{% endblock header %}
+
+{% block content %}
+
+<style>
+  .country-dropdown {
+      color: grey;
+  }
+  .country-dropdown:focus,
+  .country-dropdown:valid {
+      color: black;
+  }
+  #skills-list, #languages-list, #work-experience-list, #social-links-list, #education-list {
+    list-style-type: none; 
+    padding-left: 10px; 
+  }
+  .delete-btn {
+    cursor: pointer; 
+  }
+  .h3 {
+  color: #34b7a7; 
+  text-align: center;
+  }
+</style>
+
+<main class="main">
+  {% if messages %}
+    <div class="container mt-3">
+      {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %} 
+  
+  <!-- Section Title -->
+  <section id="title" class="about section pb-0 mb-0">
+    
+    <div class="container section-title pt-3 pb-5" data-aos="fade-up">
+      <h2>CV Generator - Create Your Professional CV Instantly</h2>
+      <p>The CV Generator is a user-friendly web application that creates professional CVs, which can be downloaded in HTML format <br> 
+        and then can be easily converted to PDF or other formats using any online converter. <br>
+        Users can seamlessly input all the necessary details, including personal information, skills, work experience, education and social media links. <br>
+        With just a few clicks, the app dynamically formats the data into a well-structured CV, ready for download.  
+        <br>Whether you need a quick HTML preview or a polished PDF for job applications, this tool ensures a fast and hassle-free CV creation process.</p>
+    </div>
+
+  </section><!-- End Section Title -->
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- /Personal Section -->  
+    <section id="personalinfo-section" class="hero-django section pt-0 pb-4">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="100">
+        <!-- Left: Personal -->
+        <div class="django-container">
+          <h3 class='mb-4' style='color:#34b7a7; font-weight: bold'>Personal Information</h3> 
+          {% for field in form %}
+            {% if forloop.counter <= 9 %}
+              <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="d-block text-start mb-2" style='color:#34b7a7; font-weight: bold'>{{ field.label }}*</label>  
+                  {% if field.name == "photo" %}
+                    <input type="file" name="photo" id="photo_image" style="display: none;" onchange="updateFileName()">
+                    <div class="d-flex justify-content-center" style="height: 100%;">
+                      <button type="button" class="btn btn-upload mb-2" onclick="document.getElementById('photo_image').click();">
+                      📁 Choose File
+                      </button>
+                    </div>
+                    <span id="file-name" style="margin-left: 10px; font-style: italic;"></span>
+                  {% else %}
+                    <div class="form-control">
+                    {{ field }}
+                    </div>
+                  {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <!-- Right: Personal Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/cv_personal.png" %}" alt="Django Logo">
+        </div>
+      </div>
+
+    </section><!-- /End Personal Section -->
+
+    <!-- /Skills Section -->
+    <section id="skills-section" class="hero-django section pt-0 pb-4">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="250">
+        <!-- Left: Add Skills -->
+        <div class="django-container">
+          <h3 class='mb-3' style='color:#34b7a7;font-weight: bold'>Skills</h3>
+          <div class="d-flex align-items-center ">
+            <input type="text" class="form-control mb-0" id="skill-name" style="text-align: left; width: 80%;  padding-left: 10;" placeholder="Enter a skill">
+            <input type="range" class="form-range mx-3" id="skill-level" min="1" max="4" value="2" step="1" oninput="updateSkillLevel()">
+            <span id="skill-level-value">Intermediate</span>
+          </div>
+          <div class="d-flex justify-content-center" style="height: 100%;">
+            <button type="button" class="my-3 btn btn-login" style='width:30%;' onclick="addSkill()">Add Skill</button>
+          </div>
+          <!-- Skills List -->
+          <ul id="skills-list" style="text-align: left;"></ul>
+          <!-- Hidden Input to Store Skills -->
+          <input type="hidden" name="skills" id="skills-input"> 
+        </div>
+
+        <!-- Right: Skills Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/cv_skills.png" %}" style='width:40%;' alt="Django Logo">
+        </div>
+      </div>
+
+    </section><!-- /End Skills Section -->
+
+    <!-- /Languages Section -->
+    <section id="languages-section" class="hero-django section pt-0 pb-4">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="250">
+        <!-- Left: Add Languages -->
+        <div class="django-container">
+          <h3 class='mb-3' style='color:#34b7a7;font-weight: bold'>Languages</h3>
+          <div class="d-flex align-items-center ">
+            <input type="text" class="form-control mb-0" id="language-name" style="text-align: left; width: 80%;  padding-left: 10;" placeholder="Enter a language">
+            <input type="range" class="form-range mx-3" id="language-level" min="1" max="4" value="2" step="1" oninput="updateLanguageLevel()">
+            <span id="language-level-value">Intermediate</span>
+          </div>
+          <div class="d-flex justify-content-center" style="height: 100%;">
+            <button type="button" class="my-3 btn btn-login" style='width:30%;' onclick="addLanguage()">Add Language</button>
+          </div>
+          <!-- Languages List -->
+          <ul id="languages-list" style="text-align: left;"></ul>
+          <!-- Hidden Input to Store Languages -->
+          <input type="hidden" name="languages" id="languages-input"> 
+        </div>
+
+        <!-- Right: Languages Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/cv_languages.png" %}" style='width:30%;' alt="Django Logo">
+        </div>
+      </div>
+
+    </section><!-- /End Language Section -->
+
+    <!-- /Experience Section -->
+    <section id="languages-section" class="hero-django section pt-0 pb-4">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="250">
+        <!-- Left: Add Experience -->
+        <div class="django-container">
+          <!-- Work Experience Section -->
+          <h3 class="mb-3" style='color:#34b7a7;font-weight: bold'>Work Experience</h3>
+          <div class="row g-3">
+            <!-- Role Name -->
+            <div class="col-md-6">
+              <label for="role-name" class="form-label">Role Name</label>
+              <input type="text" class="form-control" placeholder="Role Name" id="role-name">
+            </div>
+            <!-- Company Name -->
+            <div class="col-md-6">
+              <label for="company-name" class="form-label">Company Name</label>
+              <input type="text" class="form-control" placeholder="Company Name" id="company-name">
+            </div>
+            <!-- Start Date -->
+            <div class="col-md-6">
+              <label for="start-date" class="form-label">Start Date</label>
+              <input type="month" class="form-control" id="start-date">
+            </div>
+            <!-- End Date -->
+            <div class="col-md-6">
+              <label for="end-date" class="form-label">End Date</label>
+              <input type="month" class="form-control" id="end-date">
+            </div>
+            <!-- Checkbox for Currently Working -->
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="current-role">
+                <label class="form-check-label" for="current-role">Currently Working</label>
+              </div>
+            </div>
+            <!-- Work Description -->
+            <div class="col-12">
+                <textarea class="form-control" placeholder="Short description" id="work-description" rows="3"></textarea>
+            </div>
+            <!-- Add Work Button -->
+            <div class="col-12 text-center mt-0">
+              <button type="button" class="my-3 btn btn-login" style='width:40%;' onclick="addWorkExperience()">Add Work Experience</button>
+            </div>
+          </div>
+
+          <!-- Work Experience List -->
+          <ul id="work-experience-list" style="text-align: left;"></ul>
+          <!-- Hidden Input to Store Work Experience -->
+          <input type="hidden" name="work_experience" id="work-experience-input"> 
+        </div>
+
+        <!-- Right: Languages Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/cv_work.png" %}" style='width:40%;' alt="Django Logo">
+        </div>
+      </div>
+
+    </section><!-- /End Experience Section -->
+
+    <!-- /Education Section -->
+    <section id="education-section" class="hero-django section pt-0 pb-4">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="250">
+        <!-- Left: Add Education -->
+        <div class="django-container">
+          <!-- Education Section -->
+          <h3 class="mb-3" style='color:#34b7a7;font-weight: bold'>Education</h3>
+          <div class="row g-3">
+            <!-- Role Name -->
+            <div class="col-md-6">
+              <label for="educational-institution" class="form-label">Educational Institution</label>
+              <input type="text" class="form-control" placeholder="Educational Institution" id="educational-institution">
+            </div>
+            <!-- Company Name -->
+            <div class="col-md-6">
+              <label for="education-level" class="form-label">Education Level</label>
+              <input type="text" class="form-control" placeholder="Education Level" id="education-level">
+            </div>
+            <!-- Start Date -->
+            <div class="col-md-6">
+              <label for="edu-start-date" class="form-label">Start Date</label>
+              <input type="month" class="form-control" id="edu-start-date">
+            </div>
+            <!-- End Date -->
+            <div class="col-md-6">
+              <label for="edu-end-date" class="form-label">End Date</label>
+              <input type="month" class="form-control" id="edu-end-date">
+            </div>
+            <!-- Checkbox for Currently Working -->
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="current-attending">
+                <label class="form-check-label" for="current-attendinge">Currently Attending</label>
+              </div>
+            </div>
+            <!-- Add Work Button -->
+            <div class="col-12 text-center mt-0">
+              <button type="button" class="my-3 btn btn-login" style='width:30%;' onclick="addEducation()">Add Education</button>
+            </div>
+          </div>
+
+          <!-- Work Experience List -->
+          <ul id="education-list" style="text-align: left;"></ul>
+          <!-- Hidden Input to Store Work Experience -->
+          <input type="hidden" name="education" id="education-input"> 
+        </div>
+
+        <!-- Right: Languages Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/cv_education.png" %}" style='width:50%;' alt="Django Logo">
+        </div>
+      </div>
+
+    </section><!-- /End Education Section -->
+
+
+    <!-- /Social Section -->
+    <section id="social-section" class="hero-django section pt-0 pb-4">
+
+      <div class="django-wrapper py-0" data-aos="fade-up" data-aos-delay="250">
+        <!-- Left: Add Social -->
+        <div class="django-container">
+          <h3 class='mb-3' style='color:#34b7a7;font-weight: bold'>Social</h3>
+          <div class="d-flex align-items-center ">
+            <select id="social-platform" class="form-select mb-0" style="width: 50%; margin-right: 10px;">
+              <option value="Facebook">Facebook</option>
+              <option value="Instagram">Instagram</option>
+              <option value="Snapchat">Snapchat</option>
+              <option value="Pinterest">Pinterest</option>
+              <option value="X-Twitter">X (Twitter)</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Github">GitHub</option>
+            </select>
+            <input type="url" class="form-control mb-0" id="social-link" placeholder="Enter your profile link" style="width: 50%;">
+          </div>
+          <div class="d-flex justify-content-center" style="height: 100%;">
+            <button type="button" class="my-3 btn btn-login" style='width:30%;' onclick="addSocialLink()">Add Social</button>
+          </div>
+
+          <!-- Social List -->
+          <ul id="social-links-list" style="text-align: left;"></ul>
+          <!-- Hidden Input to Store Social -->
+          <input type="hidden" name="social_links" id="social-links-input"> 
+        </div>
+
+        <!-- Right: Social Image -->
+        <div class="image-container-django">
+          <img src="{% static "images/cv_social.png" %}" style='width:35%;' alt="Django Logo">
+        </div>
+      </div>
+
+    </section><!-- /End Social Section -->
+
+    <div class="d-flex justify-content-center" data-aos="fade-up" data-aos-delay="250">
+      <button type="submit" class="my-3 btn btn-login" style="width: 500px;">Generate CV</button>
+    </div>
+
+  </form>
+
+</main>
+
+<script>
+
+  function updateFileName() {
+    var fileInput = document.getElementById('photo_image');
+    var fileNameDisplay = document.getElementById('file-name');
+
+    if (fileInput.files.length > 0) {
+        fileNameDisplay.textContent = fileInput.files[0].name; // Show selected file name
+    } else {
+        fileNameDisplay.textContent = "";
+    }
+  }
+
+  let skills = [];
+
+  function updateSkillLevel() {
+    let slider = document.getElementById("skill-level");
+    let display = document.getElementById("skill-level-value");
+
+    let levels = {
+        1: "Beginner",
+        2: "Intermediate",
+        3: "Advanced",
+        4: "Expert"
+    };
+
+    display.textContent = levels[slider.value];
+    return levels[slider.value];
+  }
+
+  function addSkill() {
+    let skillName = document.getElementById("skill-name").value.trim();
+    let skillLevel = updateSkillLevel();
+
+    if (skillName === "") {
+        alert("Please enter a skill name.");
+        return;
+    }
+
+    if (skills.some(skill => skill.name === skillName)) {
+        alert(`You have already added skill '${skillName}'.`);
+        return;
+    }
+
+    let skillObject = {
+        name: skillName,
+        level: skillLevel
+    };
+
+    skills.push(skillObject);
+    updateSkillsList();
+  }
+
+  function updateSkillsList() {
+    let skillsList = document.getElementById("skills-list");
+    skillsList.innerHTML = "";
+
+    skills.forEach((skill, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `${skill.name} - ${skill.level} 
+            <span class="delete-btn" onclick="removeSkill(${index})">❌</span>`;
+        skillsList.appendChild(li);
+    });
+
+    // Store the skills list as JSON in the hidden input field
+    document.getElementById("skills-input").value = JSON.stringify(skills);
+  }
+
+  function removeSkill(index) {
+      skills.splice(index, 1);
+      updateSkillsList();
+  }
+
+  let languages = [];
+
+  function updateLanguageLevel() {
+    let slider = document.getElementById("language-level");
+    let display = document.getElementById("language-level-value");
+
+    let levels = {
+        1: "Beginner",
+        2: "Intermediate",
+        3: "Advanced",
+        4: "Fluent"
+    };
+
+    display.textContent = levels[slider.value];
+    return levels[slider.value];
+  }
+
+  function addLanguage() {
+    let languageName = document.getElementById("language-name").value.trim();
+    let languageLevel = updateLanguageLevel();
+
+    if (languageName === "") {
+        alert("Please enter a language name.");
+        return;
+    }
+
+    if (languages.some(language => language.name === languageName)) {
+        alert(`You have already ${languageName} language.`);
+        return;
+    }
+
+    let languageObject = {
+        name: languageName,
+        level: languageLevel
+    };
+
+    languages.push(languageObject);
+    updateLanguagesList();
+  }
+
+  function updateLanguagesList() {
+    let languagesList = document.getElementById("languages-list");
+    languagesList.innerHTML = "";
+
+    languages.forEach((language, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `${language.name} - ${language.level} 
+            <span class="delete-btn" onclick="removeLanguage(${index})">❌</span>`;
+        languagesList.appendChild(li);
+    });
+
+    // Store the skills list as JSON in the hidden input field
+    document.getElementById("languages-input").value = JSON.stringify(languages);
+  }
+
+  function removeLanguage(index) {
+    languages.splice(index, 1);
+    updateLanguagesList();
+  }
+
+  let workExperiences = [];
+
+  function setMaxDate_work() {
+    let today = new Date();
+    let maxMonth = today.toISOString().slice(0, 7); // Format: "YYYY-MM"
+    document.getElementById("start-date").setAttribute("max", maxMonth);
+    document.getElementById("end-date").setAttribute("max", maxMonth);
+  }
+
+  function addWorkExperience() {
+    let role = document.getElementById("role-name").value.trim();
+    let company = document.getElementById("company-name").value.trim();
+    let startDate = document.getElementById("start-date").value;
+    let endDate = document.getElementById("end-date").value;
+    let isCurrent = document.getElementById("current-role").checked;
+    let description = document.getElementById("work-description").value.trim();
+
+    if (role === "" || company === "" || startDate === "" || (endDate === "" && !isCurrent)) {
+        alert("Please fill out all required fields.");
+        return;
+    }
+
+    if (isCurrent) {
+        endDate = "Current";
+    }
+
+    let workEntry = {
+        role: role,
+        company: company,
+        start_date: startDate,
+        end_date: endDate,
+        description: description
+    };
+
+    workExperiences.push(workEntry);
+    updateWorkExperienceList();
+  }
+
+  function updateWorkExperienceList() {
+    let workList = document.getElementById("work-experience-list");
+    workList.innerHTML = "";
+
+    workExperiences.forEach((work, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `${work.role} at ${work.company} (${work.start_date} - ${work.end_date}) 
+            <span class="delete-btn" onclick="removeWorkExperience(${index})">❌</span>`
+        workList.appendChild(li);
+    });
+
+    document.getElementById("work-experience-input").value = JSON.stringify(workExperiences);
+  }
+
+  function removeWorkExperience(index) {
+    workExperiences.splice(index, 1);
+    updateWorkExperienceList();
+  }
+
+  let educations = [];
+
+  function setMaxDate_edu() {
+    let today = new Date();
+    let maxMonth = today.toISOString().slice(0, 7); // Format: "YYYY-MM"
+    document.getElementById("edu-start-date").setAttribute("max", maxMonth);
+    document.getElementById("edu-end-date").setAttribute("max", maxMonth);
+  }
+
+
+  function addEducation() {
+    let edu_institution = document.getElementById("educational-institution").value.trim();
+    let edu_startDate = document.getElementById("edu-start-date").value;
+    let edu_endDate = document.getElementById("edu-end-date").value;
+    let edu_isCurrent = document.getElementById("current-attending").checked;
+    let edu_level = document.getElementById("education-level").value.trim();
+
+    if (edu_institution === "" || edu_startDate === "" || (edu_endDate === "" && !edu_isCurrent)) {
+      alert("Please fill out all required fields.");
+      return;
+    }
+
+    if (edu_isCurrent) {
+      edu_endDate = "Current";
+    }
+
+    let educationEntry = {
+      edu_institution: edu_institution,
+      edu_start_date: edu_startDate,
+      edu_end_date: edu_endDate,
+      edu_level: edu_level
+    };
+
+    educations.push(educationEntry);
+    updateEducationList();
+  }
+
+  function updateEducationList() {
+    let educationList = document.getElementById("education-list");
+    educationList.innerHTML = "";
+
+    educations.forEach((education, index) => {
+        let edu_li = document.createElement("li");
+        edu_li.innerHTML = `${education.edu_level} at ${education.edu_institution} (${education.edu_start_date} - ${education.edu_end_date}) 
+            <span class="delete-btn" onclick="removeEducation(${index})">❌</span>`
+            
+        educationList.appendChild(edu_li);
+    });
+
+    document.getElementById("education-input").value = JSON.stringify(educations);
+  }
+
+  function removeEducation(index) {
+    educations.splice(index, 1);
+    updateEducationList();
+  }
+
+  let socialLinks = [];
+
+  function addSocialLink() {
+    let platform = document.getElementById("social-platform").value;
+    let link = document.getElementById("social-link").value.trim();
+
+    if (socialLinks.some(social => social.platform === platform)) {
+      alert(`You have already added ${platform} account. Remove it first to add a new link.`);
+      return;
+    }
+
+    let urlPattern = /^(https?:\/\/)?(www\.)?[\w\-]+(\.[a-z]{2,})(\/\S*)?$/i;
+    if (!urlPattern.test(link)) {
+      alert("Please enter a valid link!!!");
+      return;
+    }
+
+    let socialEntry = {
+      platform: platform,
+      link: link
+    };
+
+    socialLinks.push(socialEntry);
+    updateSocialLinksList();
+  }
+
+  function updateSocialLinksList() {
+    let list = document.getElementById("social-links-list");
+    list.innerHTML = "";
+
+    socialLinks.forEach((social, index) => {
+      let soc_li = document.createElement("li");
+      soc_li.innerHTML = `<b>${social.platform}</b>: <a href="${social.link}" target="_blank">${social.link}</a>
+      <span class="delete-btn" onclick="removeSocialLink(${index})">❌</span>`  
+      list.appendChild(soc_li);
+    });
+
+    document.getElementById("social-links-input").value = JSON.stringify(socialLinks);
+  }
+
+  function removeSocialLink(index) {
+    socialLinks.splice(index, 1);
+    updateSocialLinksList();
+  }
+
+  window.onload = function() {
+    setMaxDate_work();
+    setMaxDate_edu();
+  };
+
+</script>
+
+
+{% endblock content %}

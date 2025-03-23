@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<title>{{first_name}} CV</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
+</style>
+
+<body class="w3-light-grey">
+
+<!-- Page Container -->
+<div class="w3-content w3-margin-top" style="max-width:1400px;">
+
+  <!-- The Grid -->
+  <div class="w3-row-padding">
+  
+    <!-- Left Column -->
+    <div class="w3-third">
+    
+      <div class="w3-white w3-text-grey w3-card-4 w3-round-xlarge">
+        <div class="w3-display-container">
+          {% if photo %}
+          <img class="w3-round-xlarge" src="{{photo}}" style="width:100%" alt="Avatar">
+          {% else %}
+          <img class="w3-round-xlarge" src="https://cdn-icons-png.flaticon.com/512/4228/4228243.png" style="width:100%" alt="Else">
+          {% endif %}
+        </div>
+        <div class="w3-container">
+          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>{{profession}}</p>
+          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{city}}, {{country}}</p>
+          <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{email}}</p>
+          <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>{{phone}}</p>
+          <hr>
+
+          {% if skills %}
+            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Skills</b></p>
+            {% for skill in skills %}
+              <p>{{skill.name}}</p>
+              <div class="w3-light-grey w3-round-xlarge w3-small">
+                {% if skill.level == 'Beginner' %}
+                  <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:25%">{{skill.level}}</div> 
+                {% elif skill.level == 'Intermediate' %}
+                  <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:50%">{{skill.level}}</div> 
+                {% elif skill.level == 'Advanced' %}
+                  <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:75%">{{skill.level}}</div> 
+                {% elif skill.level == 'Expert' %}
+                  <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:100%">{{skill.level}}</div>                   
+                {% endif %}
+            </div>
+            {% endfor %}
+          {% endif %}
+
+          {% if languages %}
+            <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b></p> 
+            {% for language in languages %}
+            <p>{{language.name}}</p>
+            <div class="w3-light-grey w3-round-xlarge w3-small">
+                {% if language.level == 'Beginner' %}
+                  <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:25%">{{language.level}}</div> 
+                {% elif language.level == 'Intermediate' %}
+                  <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:50%">{{language.level}}</div> 
+                {% elif language.level == 'Advanced' %}
+                  <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:75%">{{language.level}}</div> 
+                {% elif language.level == 'Fluent' %}
+                  <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:100%">{{language.level}}</div>                   
+                {% endif %}
+            </div>
+            {% endfor %}         
+          {% endif %}
+
+          <br>
+        </div>
+      </div><br>
+
+    <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="w3-twothird">
+      <div class="w3-container w3-card w3-teal w3-margin-bottom w3-round-xlarge">
+        <h1 class="w3-text-white w3-padding-16">{{first_name}} {{last_name}}</h1>
+      </div>
+      <div class="w3-container w3-card w3-white w3-margin-bottom w3-round-xlarge">
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-id-badge fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Summary</h2>
+        <p>{{summary}}</p>
+        <hr>
+      </div>
+
+      <div class="w3-container w3-card w3-white w3-margin-bottom w3-round-xlarge">
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Work Experience</h2>
+        
+        {% if work_experience %}
+          {% for work in work_experience %}
+            <div class="w3-container">
+              <h5 class="w3-opacity"><b>{{work.role}} / {{work.company}}</b></h5>
+              {% if work.end_date == 'Current' %}
+                <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>{{work.start_date}} - <span class="w3-tag w3-teal w3-round">Current</span></h6>
+              {% else %}
+                <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>{{work.start_date}} - {{work.end_date}}</h6>
+              {% endif %}
+              <p>{{work.description}}</p>
+              <hr>
+            </div>           
+          {% endfor %}
+        {% endif %}
+
+      </div>
+
+      <div class="w3-container w3-card w3-white w3-round-xlarge">
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-graduation-cap fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Education</h2>
+
+        {% if educations %}
+          {% for education in educations %}
+            <div class="w3-container">
+              <h5 class="w3-opacity"><b>{{education.edu_institution}}</b></h5>
+              {% if education.edu_end_date == 'Current' %}
+                <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>{{education.edu_start_date}} - <span class="w3-tag w3-teal w3-round">Current</span></h6>
+              {% else %}
+                <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>{{education.edu_start_date}} - {{education.edu_end_date}}</h6>
+              {% endif %}
+              <p>{{education.edu_level}}</p>
+              <hr>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+      </div>
+
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+  <!-- End Page Container -->
+</div>
+
+<footer class="w3-container w3-teal w3-center w3-margin-top">
+  <p>Find me on social media.</p>
+
+  {% for social in social_links %}
+    <a href={{social.link}}>
+      <i class="fa-brands fa-{{social.platform.lower}} w3-hover-opacity"></i>
+    </a>
+  {% endfor %}
+
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+
+</body>
+</html>

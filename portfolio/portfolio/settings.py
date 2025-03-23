@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'about',
     'users',
-    'football'
+    'football',
+    'cv_generator'
 ]
 
 MIDDLEWARE = [
