@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Crypto Analysis{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %}>Home</a></li>
+  <li><a href={% url "about" %}>About</a></li>
+  <li><a href={% url "website" %}>Website</a></li>
+  <li class="dropdown"><a href="#"><span>Web Apps</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+    <ul>
+      <li><a href={% url "football" %}>Football Data</a></li>
+      <li><a href={% url "cv_generator" %}>CV Generator</a></li>
+      <li><a href={% url "crypto" %}>Crypto Analysis</a></li>
+    </ul>
+  </li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  {% if request.user.is_authenticated %}
+    <li><a href={% url "edit_user" %}>My profile</a></li>
+    <li><a href={% url "logout" %}>Logout</a></li>
+  {% else %}
+    <li><a href={% url "login" %}>Login</a></li>
+  {% endif %}
+  
+{% endblock header %}
+
+{% block content %}
+
+  <main class="main">
+    {% if messages %}
+      <div class="container mt-3">
+          {% for message in messages %}
+              <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          {% endfor %}
+        </div>
+    {% endif %} 
+
+    <section id="crypto_dashboard" class="about section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>{{ coin|capfirst }} Price Chart ({{ vs_currency|upper }})</h2>
+        <p>This chart shows the historical <strong>{{chart_type}}</strong> trend of <strong>{{ coin|capfirst }}</strong> over the past 
+          <strong>{{ timeframe }} {% if timeframe == '1' %}day{% else %}days{% endif %}</strong>, denominated in 
+          <strong>{{ vs_currency|upper }}</strong>.<br>Use this interactive chart to explore trends and patterns in the selected timeframe,  
+          or scroll down to download the dataset in CSV format or chart image in PNG format.<br>
+          If you'd like to select a different coin, timeframe or chart data, just hit the "Back to Crypto Dashboard" button below.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100"> 
+        <div class="row gy-4 justify-content-center">
+          <div class="login-wrapper" style="max-width:100%;" data-aos="fade-up" data-aos-delay="100"> 
+            
+            <!-- Left: Chart -->
+            <div class="login-container ">
+              {% if chart_div %}
+                <!-- Load Plotly JS (CDN or local) -->
+                <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+                <!-- Insert rendered chart -->
+                <div id="plotly-chart" style="width: 100%; min-height: 400px;">
+                  {{ chart_div|safe }}
+                </div>
+                <!-- Buttons below chart -->
+                <div class="mt-3" style="width: 100%; display: flex; gap: 50px; justify-content: center">
+                  <form method="post" action="{% url 'crypto_csv' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="coin" value="{{ coin }}">
+                    <input type="hidden" name="vs_currency" value="{{ vs_currency }}">
+                    <input type="hidden" name="days" value="{{ timeframe }}">
+                    <button type="submit" class="btn btn-login">Download data as CSV</button>
+                  </form>
+                  <div>
+                    <button id="download-png-btn" class="btn btn-login">Download Chart as PNG</button>
+                  </div>
+                </div>
+                <form method="get" action="{% url 'crypto' %}">
+                  <button type="submit" class="btn btn-login mt-3">Back to Crypto Dashboard</button>
+                </form>
+              {% endif %}
+            </div>    
+          
+            <!-- Right: Image -->
+            <div class="image-container-login">
+              {% if coin_image_url %}
+                <img src="{{ coin_image_url }}" alt="Coin Logo" style="max-width: 180px; max-height: 180px;">
+              {% endif %}
+              <div class="django-container pt-5">
+                <p><strong>Min Value:</strong> {{min_value}} {{vs_currency|upper}} <br>
+                <strong>Date:</strong> {{min_date}}</p>
+              </div>
+              <div class="django-container pt-3">
+                <p><strong>Max Value:</strong> {{max_value}} {{vs_currency|upper}} <br>
+                <strong>Date:</strong> {{max_date}}</p>
+              </div>
+              <div class="django-container pt-3">
+                <p><strong>Average Value:</strong> {{avg_value}} {{vs_currency|upper}}</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section><!-- /End Section -->
+
+  </main>
+
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <!-- jQuery (required for select2) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <script>
+    document.getElementById('download-png-btn').addEventListener('click', function () {
+      const chartDiv = document.getElementById('plotly-chart').getElementsByClassName('plotly-graph-div')[0];
+  
+      Plotly.downloadImage(chartDiv, {
+        format: 'png',
+        filename: '{{coin}}_{{vs_currency}}_{{timeframe}}d',
+        width: 1200,
+        height: 800,
+        scale: 2 // higher scale = sharper image
+      });
+    });
+
+  </script>
+
+{% endblock content %}

@@ -26,6 +26,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('football/', include('football.urls')),
     path('cv_generator/', include('cv_generator.urls')), 
+    path('crypto/', include('crypto.urls')), 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

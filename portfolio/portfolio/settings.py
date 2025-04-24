@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'about',
     'users',
     'football',
-    'cv_generator'
+    'cv_generator',
+    'crypto'
 ]
 
 MIDDLEWARE = [

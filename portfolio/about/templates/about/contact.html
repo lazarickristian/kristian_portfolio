@@ -12,8 +12,7 @@
     <ul>
       <li><a href={% url "football" %}>Football Data</a></li>
       <li><a href={% url "cv_generator" %}>CV Generator</a></li>
-      <li><a href="#">Third App</a></li>
-      <li><a href="#">Fourth App</a></li>
+      <li><a href={% url "crypto" %}>Crypto Analysis</a></li>
     </ul>
   </li>
   <li><a href={% url "contact" %} class="active">Contact</a></li>
@@ -29,6 +28,17 @@
 {% block content %}
 
   <main class="main">
+    
+    {% if messages %}
+      <div class="container mt-3">
+          {% for message in messages %}
+              <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          {% endfor %}
+      </div>
+    {% endif %} 
 
     <!-- Contact Section -->
     <section id="contact" class="contact section">
@@ -100,13 +110,6 @@
                 </div>
 
                 <div class="col-md-12 text-center">
-                  {% if messages %}
-                    {% for message in messages %}
-                      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                          {{ message }}
-                      </div>
-                    {% endfor %}
-                  {% endif %}
                   <button type="submit">Send Message</button>
                 </div>
 

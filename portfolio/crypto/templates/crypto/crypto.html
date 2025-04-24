@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Crypto Analysis{% endblock title %}
+
+{% block header %}
+  <li><a href={% url "index" %}>Home</a></li>
+  <li><a href={% url "about" %}>About</a></li>
+  <li><a href={% url "website" %}>Website</a></li>
+  <li class="dropdown"><a href="#"><span>Web Apps</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+    <ul>
+      <li><a href={% url "football" %}>Football Data</a></li>
+      <li><a href={% url "cv_generator" %}>CV Generator</a></li>
+      <li><a href={% url "crypto" %}>Crypto Analysis</a></li>
+    </ul>
+  </li>
+  <li><a href={% url "contact" %}>Contact</a></li>
+  {% if request.user.is_authenticated %}
+    <li><a href={% url "edit_user" %}>My profile</a></li>
+    <li><a href={% url "logout" %}>Logout</a></li>
+  {% else %}
+    <li><a href={% url "login" %}>Login</a></li>
+  {% endif %}
+  
+{% endblock header %}
+
+{% block content %}
+
+  <main class="main">
+    {% if messages %}
+      <div class="container mt-3">
+          {% for message in messages %}
+              <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          {% endfor %}
+        </div>
+    {% endif %} 
+
+    <section id="crypto_dashboard" class="about section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Crypto Analysis</h2>
+        <p>This interactive crypto dashboard allows users to explore historical cryptocurrency data with powerful visual insights. <br> 
+          Built using Django, Pandas, and Plotly, the app lets users select from thousands of coins (searchable and sorted by market cap) and compare them against standard 
+          currencies across various timeframes. 
+          <br>It features real-time data from the CoinGecko API, downloadable CSVs and modern, customizable charts for price, volume, and market cap trends- 
+           <br> all designed to showcase clean, data-driven design and data science skills. <br> <br>
+          <strong>To get started</strong>, simply choose a cryptocurrency, select a standard currency and a timeframe, then click "Analyze" to view the chart and data.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100"> 
+        <div class="row gy-4 justify-content-center">
+          <div class="login-wrapper" data-aos="fade-up" data-aos-delay="100"> 
+            <!-- Left: Dropdown Lists -->
+            <div class="login-container ">
+              <div class="mb-3">
+                <form method="post">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label class="d-block text-start mb-1">Cryptocurrency:</label>
+                    <div class='form-control'>{{form.coin}}</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="d-block text-start mb-1">Select a currency (USD, EUR, etc.) to compare against:</label>
+                    <div class='form-control'>{{form.vs_currency}}</div>
+                  </div>
+                  <div class="mb-3">
+                    <label  class="d-block text-start mb-1">Timeframe:</label>
+                    <div class='form-control'>{{form.days}}</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="d-block text-start mb-1">Chart Data:</label>
+                    <div class='form-control'>{{form.chart_type}}</div>
+                  </div>
+                  <button type="submit" class="btn btn-login">Analyze</button>
+                </form>
+              </div>
+            </div>    
+          
+            <!-- Right: Image -->
+            <div class="image-container-login">
+              <img src="{% static "images/crypto.png" %}" alt="crypto">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section><!-- /Login Section -->
+
+  </main>
+
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <!-- jQuery (required for select2) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+    $('#coin-select').select2();
+    });
+  </script>
+
+  <style>
+    .select2-container--default .select2-selection--single {
+      border: none;
+      border-radius: 0;
+      background-color: transparent;
+    }
+    .select2-selection__rendered {
+      text-align: left;
+      padding-left: 0;
+    }
+  </style>
+
+{% endblock content %}
