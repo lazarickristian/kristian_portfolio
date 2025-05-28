@@ -55,12 +55,12 @@
           <div class="login-wrapper" style="max-width:100%;" data-aos="fade-up" data-aos-delay="100"> 
             
             <!-- Left: Chart -->
-            <div class="login-container ">
+            <div class="crypto-container ">
               {% if chart_div %}
                 <!-- Load Plotly JS (CDN or local) -->
                 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
                 <!-- Insert rendered chart -->
-                <div id="plotly-chart" style="width: 100%; min-height: 400px;">
+                <div id="plotly-chart" class='plotly'>
                   {{ chart_div|safe }}
                 </div>
                 <!-- Buttons below chart -->

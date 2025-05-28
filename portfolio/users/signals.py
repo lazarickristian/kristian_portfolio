@@ -1,59 +1,58 @@
-from django.db.models.signals import post_delete, pre_save
-from django.dispatch import receiver
-from .models import Profile
 import os
 import shutil
 import stat
+from django.db.models.signals import post_delete, pre_save
+from django.dispatch import receiver
+from .models import Profile
+
+# def delete_file_and_parent_folder(file_path):
+#     """Safely delete a file and its parent folder if empty."""
+#     try:
+#         if os.path.isfile(file_path):
+#             os.remove(file_path)
+
+#             # Get parent folder
+#             parent_folder = os.path.dirname(file_path)
+
+#             # Make parent folder writable just in case
+#             os.chmod(parent_folder, stat.S_IWRITE)
+
+#             # Delete parent folder if empty
+#             if os.path.exists(parent_folder) and not os.listdir(parent_folder):
+#                 shutil.rmtree(parent_folder)
+
+#     except Exception as e:
+#         # Optionally log the error, or ignore
+#         pass
+
+def delete_file_safely(file_path):
+    """Safely delete a file if it exists."""
+    try:
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+    except Exception:
+        pass
+
 
 @receiver(post_delete, sender=Profile)
-def auto_delete_file_on_delete(sender, instance, **kwargs):
-    """
-    Deletes the file and its parent directory (if empty) when the corresponding `Profile` object is deleted.
-    """
-    if instance.image:
-        # Get the file path
-        file_path = instance.image.path
-
-        # Check if the file exists
-        if os.path.isfile(file_path):
-            # Delete the file
-            os.remove(file_path)
-
-            # Get the parent directory
-            parent_directory = os.path.dirname(file_path)
-
-            # Check if the parent directory is empty
-            if os.path.exists(parent_directory) and not os.listdir(parent_directory):
-                # Delete the parent directory if it's empty
-                os.chmod(parent_directory, stat.S_IWRITE)  # Allow write permissions
-                shutil.rmtree(parent_directory)
+def delete_profile_image_on_delete(sender, instance, **kwargs):
+    """Delete profile image from filesystem when a Profile is deleted."""
+    if instance.image and instance.image.name:
+        delete_file_safely(instance.image.path)
 
 @receiver(pre_save, sender=Profile)
-def auto_delete_file_on_update(sender, instance, **kwargs):
-    """
-    Deletes the previous image file when the `Profile` instance is updated with a new image.
-    """
-
+def delete_old_profile_image_on_update(sender, instance, **kwargs):
+    """Delete old profile image when a Profile is updated with a new image."""
     if not instance.pk:
-        # If the instance is being created (not updated), do nothing
-        return False
+        return False  # No previous file if new object
 
     try:
-        # Get the existing instance from the database
         old_instance = Profile.objects.get(pk=instance.pk)
-
-        # Check if the image field has changed
-        if old_instance.image and old_instance.image != instance.image:
-            # Delete the old image file
-            
-            if os.path.isfile(old_instance.image.path):
-                os.remove(old_instance.image.path)
-
-                # Optionally, delete the parent directory if it's empty
-                parent_directory = os.path.dirname(old_instance.image.path)
-                if os.path.exists(parent_directory) and not os.listdir(parent_directory):
-                    os.chmod(parent_directory, stat.S_IWRITE)  # Allow write permissions
-                    shutil.rmtree(parent_directory)
     except Profile.DoesNotExist:
-        # If the instance doesn't exist in the database, do nothing
         return False
+
+    old_image = old_instance.image
+    new_image = instance.image
+
+    if old_image and old_image != new_image:
+        delete_file_safely(old_image.path)

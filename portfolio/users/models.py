@@ -1,15 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.conf import settings
 import os
-import shutil 
+from datetime import datetime
 
-def user_directory_path(instance, filename):
-    # This function will generate a unique upload path based on the username
-    _, extension = os.path.splitext(filename)
-    extension = extension.lower()
-    return f'users/{instance.user.username}/{instance.user.username}{extension}'
+
+# def user_directory_path(instance, filename):
+#     # This function will generate a unique upload path based on the username
+#     #print(filename[-4:])
+#     return f'users/{instance.user.username}/{instance.user.username}{filename[-4:]}'
     
+def user_directory_path(instance, filename):
+    extension = os.path.splitext(filename)[1]  # Get file extension (.jpg, .png, etc.)
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    return f'users/{instance.user.username}/{instance.user.username}_{timestamp}{extension}'
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

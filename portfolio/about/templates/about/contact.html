@@ -28,17 +28,6 @@
 {% block content %}
 
   <main class="main">
-    
-    {% if messages %}
-      <div class="container mt-3">
-          {% for message in messages %}
-              <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
-                  {{ message }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-          {% endfor %}
-      </div>
-    {% endif %} 
 
     <!-- Contact Section -->
     <section id="contact" class="contact section">
@@ -61,19 +50,11 @@
                   </div>
               </div><!-- End Info Item -->
 
-              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
-                <i class="bi bi-whatsapp flex-shrink-0"></i>
-                  <div>
-                    <h3>WhatsApp</h3>
-                    <p>+385 091 942 0314</p>
-                  </div>
-              </div><!-- End Info Item -->
-
               <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
                 <i class="bi bi-envelope flex-shrink-0"></i>
                 <div>
                     <h3>Email Me</h3>
-                    <p><a href="mailto:lazarickristian@gmail.com" style="color:#444444;">lazarickristian@gmail.com</a></p>
+                    <p><a href="mailto:kristian.portfolio1990@gmail.com" style="color:#444444;">kristian.portfolio1990@gmail.com</a></p>
                 </div>
               </div><!-- End Info Item -->
 
@@ -110,6 +91,13 @@
                 </div>
 
                 <div class="col-md-12 text-center">
+                  {% if messages %}
+                    {% for message in messages %}
+                      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
                   <button type="submit">Send Message</button>
                 </div>
 
