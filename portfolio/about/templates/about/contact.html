@@ -28,6 +28,16 @@
 {% block content %}
 
   <main class="main">
+    {% if messages %}
+      <div class="container mt-3">
+          {% for message in messages %}
+              <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          {% endfor %}
+      </div>
+    {% endif %}
 
     <!-- Contact Section -->
     <section id="contact" class="contact section">
@@ -90,14 +100,6 @@
                   <textarea class="form-control" name="message" rows="10" id="message-field" required=""></textarea>
                 </div>
 
-                <div class="col-md-12 text-center">
-                  {% if messages %}
-                    {% for message in messages %}
-                      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                          {{ message }}
-                      </div>
-                    {% endfor %}
-                  {% endif %}
                   <button type="submit">Send Message</button>
                 </div>
 
