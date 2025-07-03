@@ -1,7 +1,39 @@
-Welcome to my personal portfolio and CV website, built using the Django Framework to showcase my Python programming skills. As a beginner in software development, I have designed this platform to demonstrate my abilities in web development, data science, and web scraping.
+# 🧑‍💻 Personal Portfolio & CV Website
 
-This website features various interactive applications that highlight my technical expertise. These apps, accessible only to registered users, allow visitors to explore my knowledge of Python in action. Additionally, each registered user has a personal section where they can manage their profiles by updating, editing, or deleting their profiles. For those interested in the technical details, the source code of this project is available on this GitHub profile, where you can explore, review, and provide feedback on my work.
+Welcome to my **personal portfolio and CV website**, built using the **Django Framework** as a way to showcase my growing skills in **Python programming**. As a beginner in software development, I created this platform to demonstrate my capabilities in **web development**, **data science**, and **web scraping**.
 
-Frontend part of website is based on a Bootstrap template from BootstrapMade, which I have customized to enhance it's aesthetics and functionality and icons are used from Flaticon icons. However, since I'm not a HTML and CSS expert, some modifications may contain mistakes or bugs, and I welcome any feedback or suggestions for improvement.
+## 🌟 What You'll Find
 
-Finally, I have included a contact form where visitors can reach out for inquiries, collaboration opportunities, or any advice related to Python programming and web development. I welcome all feedback and discussions, making this platform not only a showcase of my skills but also a way to connect with like-minded individuals and potential collaborators and employers.
+This site includes several **interactive applications** that reflect my hands-on experience with Python. These apps are available **only to registered users** and serve as practical demonstrations of my coding abilities.
+
+Each registered user gets their own private space where they can:
+
+- 📝 Update their profile  
+- ✏️ Edit details  
+- ❌ Delete their account  
+
+## 💻 Tech Stack
+
+- **Backend:** Django (Python)
+- **Frontend:** Bootstrap template from [BootstrapMade](https://bootstrapmade.com) (with custom modifications)
+- **Icons:** [Flaticon](https://www.flaticon.com/) icons
+
+While I’m still learning **HTML** and **CSS**, I’ve done my best to improve the design and user experience. I welcome any feedback or suggestions you might have!
+
+## 📬 Get in Touch
+
+Have questions, advice, or collaboration ideas? I’d love to hear from you!
+
+➡️ Use the **Contact Form** on the website to reach out.  
+➡️ Or connect with me via email or social media (details on the site).
+
+## 🧠 Open to Feedback
+
+This project is open-source and available on my **GitHub profile**. If you’re curious about the code, want to offer advice, or just want to see how I’ve built things, feel free to explore the repository and leave comments or suggestions.
+
+## 🤝 Let's Connect
+
+This site is not just a portfolio—it's a growing space for learning, sharing, and connecting with others in the tech community. Whether you're a fellow beginner, an experienced developer, or a potential employer, thanks for visiting!
+
+---
+
