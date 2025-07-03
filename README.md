@@ -1,0 +1,7 @@
+Welcome to my personal portfolio and CV website, built using the Django Framework to showcase my Python programming skills. As a beginner in software development, I have designed this platform to demonstrate my abilities in web development, data science, and web scraping.
+
+This website features various interactive applications that highlight my technical expertise. These apps, accessible only to registered users, allow visitors to explore my knowledge of Python in action. Additionally, each registered user has a personal section where they can manage their profiles by updating, editing, or deleting their profiles. For those interested in the technical details, the source code of this project is available on this GitHub profile, where you can explore, review, and provide feedback on my work.
+
+Frontend part of website is based on a Bootstrap template from BootstrapMade, which I have customized to enhance it's aesthetics and functionality and icons are used from Flaticon icons. However, since I'm not a HTML and CSS expert, some modifications may contain mistakes or bugs, and I welcome any feedback or suggestions for improvement.
+
+Finally, I have included a contact form where visitors can reach out for inquiries, collaboration opportunities, or any advice related to Python programming and web development. I welcome all feedback and discussions, making this platform not only a showcase of my skills but also a way to connect with like-minded individuals and potential collaborators and employers.
